@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Dashboard - Settings</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    <nav id="sidebar">
+        <div class="logo-section">
+            <i class="ph ph-lightning"></i>
+            <span class="logo-text">APEX</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-item"><i class="ph ph-squares-four"></i><span class="nav-text">Overview</span></a>
+            <a href="analytics.html" class="nav-item"><i class="ph ph-chart-line"></i><span class="nav-text">Analytics</span></a>
+            <a href="hardware.html" class="nav-item"><i class="ph ph-hard-drive"></i><span class="nav-text">Hardware</span></a>
+            <a href="settings.html" class="nav-item"><i class="ph ph-gear"></i><span class="nav-text">Settings</span></a>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <header>
+            <button class="toggle-btn" id="toggleBtn"><i class="ph ph-list"></i></button>
+            <div class="user-badge">Riej</div>
+        </header>
+        <div class="content-body">
+            <h2>Global Settings</h2>
+            <div class="card" style="max-width: 500px;">
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 8px; color: #64748b;">API ENDPOINT</label>
+                    <input type="text" value="http://192.168.1.100:5000" style="width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px;">
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 8px; color: #64748b;">REFRESH RATE (SEC)</label>
+                    <input type="number" value="5" style="width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px;">
+                </div>
+                <button style="width: 100%; padding: 12px; background: #2563eb; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">Save Configurations</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

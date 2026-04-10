@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Dashboard - Hardware</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    <nav id="sidebar">
+        <div class="logo-section">
+            <i class="ph ph-lightning"></i>
+            <span class="logo-text">APEX</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-item"><i class="ph ph-squares-four"></i><span class="nav-text">Overview</span></a>
+            <a href="analytics.html" class="nav-item"><i class="ph ph-chart-line"></i><span class="nav-text">Analytics</span></a>
+            <a href="hardware.html" class="nav-item"><i class="ph ph-hard-drive"></i><span class="nav-text">Hardware</span></a>
+            <a href="settings.html" class="nav-item"><i class="ph ph-gear"></i><span class="nav-text">Settings</span></a>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <header>
+            <button class="toggle-btn" id="toggleBtn"><i class="ph ph-list"></i></button>
+            <div class="user-badge">Riej</div>
+        </header>
+        <div class="content-body">
+            <h2>Connected Devices</h2>
+            <div class="card">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead style="text-align: left; color: #64748b; font-size: 0.8rem; text-transform: uppercase;">
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <th style="padding: 12px;">Device ID</th>
+                            <th>Status</th>
+                            <th>Temp</th>
+                            <th>Last Sync</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #f1f5f9;">
+                            <td style="padding: 16px 12px; font-weight: 600;">Jetson-Orin-01</td>
+                            <td><span style="color: #10b981; font-weight: 700;">● Online</span></td>
+                            <td>42°C</td>
+                            <td>Just now</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 16px 12px; font-weight: 600;">ESP32-S3-Sensor</td>
+                            <td><span style="color: #10b981; font-weight: 700;">● Online</span></td>
+                            <td>28°C</td>
+                            <td>2m ago</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

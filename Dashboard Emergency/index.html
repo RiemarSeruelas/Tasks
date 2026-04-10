@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><title>Apex | Personel</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    <nav id="sidebar">
+        <div class="logo-section"><i class="ph-bold ph-shield-check"></i><span class="logo-text">Emergency Dashboard</span></div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-item active"><i class="ph ph-users"></i><span class="nav-text">Personel</span></a>
+            <a href="map.html" class="nav-item"><i class="ph ph-map-trifold"></i><span class="nav-text">Evac Map</span></a>
+            <a href="history.html" class="nav-item"><i class="ph ph-clock-counter-clockwise"></i><span class="nav-text">History</span></a>
+            <a href="analytics.html" class="nav-item"><i class="ph ph-clock-counter-clockwise"></i><span class="nav-text">Analytics</span></a>
+            <a href="rescue.html" class="nav-item"><i class="ph ph-first-aid"></i><span class="nav-text">Rescue Team</span></a>
+        </div>
+        </div>
+    </nav>
+    <div class="main-content">
+   <header>
+    <div class="header-left">
+        <button id="toggleBtn" class="header-btn" title="Toggle Sidebar">
+            <i class="ph ph-list"></i>
+        </button>
+        <button onclick="toggleTheme()" class="header-btn" id="themeIcon" title="Toggle Theme">
+            <i class="ph ph-moon"></i>
+        </button>
+    </div>
+    
+    <div class="header-center">
+        <button class="panic-btn" id="panicBtn" onclick="toggleEmergency()">
+            Trigger Emergency
+        </button>
+    </div>
+
+    <div class="header-right" style="justify-content: flex-end;">
+        <span style="font-weight: 700; font-size: 0.9rem;">Admin</span>
+    </div>
+</header>
+
+    <div class="content-body">
+        <div id="personnel-grid" class="personnel-grid">
+            </div>
+    </div>
+</div>
+
+    <div class="modal-overlay" id="personModal" onclick="closePopup()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <i class="ph ph-x close-modal" onclick="closePopup()"></i>
+            <img id="modalImg" class="profile-img" src="">
+            <h2 id="modalName"></h2>
+            <p id="modalInfo" style="color:var(--text-muted); line-height:1.6;"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

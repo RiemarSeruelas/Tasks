@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Apex | Rescue Team</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    <nav id="sidebar">
+        <div class="logo-section"><i class="ph-bold ph-shield-check"></i><span class="logo-text">Emergency Dashboard</span></div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-item"><i class="ph ph-users"></i><span class="nav-text">Personel</span></a>
+            <a href="map.html" class="nav-item"><i class="ph ph-map-trifold"></i><span class="nav-text">Evac Map</span></a>
+            <a href="history.html" class="nav-item"><i class="ph ph-clock-counter-clockwise"></i><span class="nav-text">History</span></a>
+            <a href="analytics.html" class="nav-item"><i class="ph ph-chart-bar"></i><span class="nav-text">Analytics</span></a>
+            <a href="rescue.html" class="nav-item active"><i class="ph ph-first-aid"></i><span class="nav-text">Rescue Team</span></a>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <header>
+            <div class="header-left">
+                <button id="toggleBtn" class="header-btn" title="Toggle Sidebar"><i class="ph ph-list"></i></button>
+                <button onclick="toggleTheme()" class="header-btn" id="themeIcon" title="Toggle Theme"><i class="ph ph-moon"></i></button>
+            </div>
+            
+
+            <div class="header-right" style="justify-content: flex-end;">
+                <span style="font-weight: 700; font-size: 0.9rem;">Admin</span>
+            </div>
+        </header>
+
+        <div class="content-body">
+            <div class="rescue-grid-layout">
+                <div class="main-display-area">
+                    <div class="glass-card" style="flex-grow: 1;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 30px;">
+                            <div>
+                                <h2 style="color:white; margin-bottom: 4px;">Emergency Response Team</h2>
+                                <p style="color:var(--text-muted); font-size: 0.85rem;">Personnel authorized for rescue and medical assistance.</p>
+                            </div>
+                            <div class="rescue-badge">Deployment Ready</div>
+                        </div>
+                        <div id="rescueTeamList" class="rescue-grid">
+                            </div>
+                    </div>
+                </div>
+
+                <div class="side-panel">
+                    <div class="glass-card" style="background: rgba(37, 99, 235, 0.1); border-color: var(--accent-blue);">
+                        <h3 style="color: var(--accent-blue);">Rescue Protocol</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-main); line-height: 1.6;">
+                            Responders are excluded from standard safety counts to prevent data skewing during active emergencies.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        function renderRescuePage() {
+            const list = document.getElementById('rescueTeamList');
+            if (!list) return;
+            const team = personnel.filter(p => p.dept.toUpperCase() === "EMERGENCY");
+            list.innerHTML = team.map(p => `
+                <div class="rescue-card-v2">
+                    <img src="${p.img}" class="rescue-avatar">
+                    <div class="rescue-body">
+                        <h4>${p.name}</h4>
+                        <span>${p.role}</span>
+                    </div>
+                    <div class="rescue-footer">
+                        <button class="rescue-action-btn"><i class="ph ph-phone"></i></button>
+                        <button class="rescue-action-btn"><i class="ph ph-chat-centered-text"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        document.addEventListener('DOMContentLoaded', renderRescuePage);
+    </script>
+</body>
+</html>

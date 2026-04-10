@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Apex | Analytics</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <nav id="sidebar">
+        <div class="logo-section"><i class="ph-bold ph-shield-check"></i><span class="logo-text">Emergency Dashboard</span></div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-item"><i class="ph ph-users"></i><span class="nav-text">Personel</span></a>
+            <a href="map.html" class="nav-item"><i class="ph ph-map-trifold"></i><span class="nav-text">Evac Map</span></a>
+            <a href="history.html" class="nav-item"><i class="ph ph-clock-counter-clockwise"></i><span class="nav-text">History</span></a>
+            <a href="analytics.html" class="nav-item active"><i class="ph ph-chart-bar"></i><span class="nav-text">Analytics</span></a>
+            <a href="rescue.html" class="nav-item"><i class="ph ph-first-aid"></i><span class="nav-text">Rescue Team</span></a>
+        </div>
+    </nav>
+
+    <div class="main-content">
+    <header>
+        <div class="header-left">
+            <button id="toggleBtn" class="header-btn" title="Toggle Sidebar"><i class="ph ph-list"></i></button>
+            <button onclick="toggleTheme()" class="header-btn" id="themeIcon" title="Toggle Theme"><i class="ph ph-moon"></i></button>
+        </div>
+
+        <div class="header-right">
+            <div style="display: flex; gap: 10px;">
+                <select id="eventFilter" onchange="renderCharts()" class="custom-select">
+                    <option value="LATEST">Latest Session</option>
+                </select>
+                <select id="deptFilter" onchange="renderCharts()" class="custom-select">
+                    <option value="ALL">All Departments</option>
+                    <option value="ENGINEERING">Engineering</option>
+                    <option value="HUMAN RESOURCES">HR</option>
+                    <option value="LOGISTICS">Logistics</option>
+                </select>
+            </div>
+            <span style="font-weight: 700; font-size: 0.9rem; margin-left: 15px;">Admin</span>
+        </div>
+    </header>
+
+    <div class="content-body">
+    <div class="analytics-grid">
+        <div class="main-display-area">
+            <div class="charts-row">
+                <div class="glass-card chart-container">
+                    <h3>Personnel Status Count</h3>
+                    <div class="canvas-wrapper"><canvas id="barChart"></canvas></div>
+                </div>
+                <div class="glass-card chart-container">
+                    <h3>Safety Distribution (%)</h3>
+                    <div class="canvas-wrapper"><canvas id="pieChart"></canvas></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="side-panel">
+            <div class="glass-card" style="height: auto;">
+                <h3>Department Safety Status</h3>
+                <div id="deptHotspots"></div>
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+</div>
+    <script src="script.js"></script>
+</body>
+</html>

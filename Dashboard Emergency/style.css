@@ -1,0 +1,308 @@
+:root {
+    --sidebar-width: 260px;
+    --sidebar-collapsed: 80px;
+    --primary-bg: #020617;
+    --card-bg: #1e293b;
+    --sidebar-bg: #000000;
+    --accent-blue: #2563eb;
+    --emergency-red: #ef4444;
+    --safe-green: #10b981;
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+    --border-color: #334155;
+}
+
+/* Light Mode Specific Overrides */
+[data-theme="light"] {
+    --primary-bg: #f1f5f9;    /* Slightly deeper cool gray */
+    --card-bg: #ffffff;       /* Pure white cards */
+    --sidebar-bg: #ffffff;
+    --text-main: #0f172a;     /* Darker navy for better readability */
+    --text-muted: #64748b;
+    --border-color: #cbd5e1;  /* Darker borders for definition */
+}
+
+/* Global Styles */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+body { background-color: var(--primary-bg); display: flex; color: var(--text-main); min-height: 100vh; overflow-x: hidden; }
+
+/* Sidebar */
+#sidebar { 
+    width: var(--sidebar-width); background: var(--sidebar-bg); 
+    display: flex; flex-direction: column; height: 100vh; 
+    position: sticky; top: 0; flex-shrink: 0; transition: width 0.3s ease;
+    border-right: 1px solid var(--border-color);
+}
+#sidebar.collapsed { width: var(--sidebar-collapsed); }
+
+.logo-section { padding: 24px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border-color); }
+.logo-text { font-weight: 800; color: white; white-space: nowrap; }
+#sidebar.collapsed .logo-text { display: none; }
+
+.nav-links { padding: 20px 12px; }
+.nav-item { 
+    display: flex; align-items: center; padding: 14px 16px; color: var(--text-muted); 
+    text-decoration: none; border-radius: 12px; margin-bottom: 8px; gap: 15px; 
+}
+.nav-item.active { background: var(--accent-blue); color: white; }
+#sidebar.collapsed .nav-text { display: none; }
+
+/* Light Mode Sidebar Fixes */
+[data-theme="light"] #sidebar {border-right: 2px solid #e2e8f0; }
+[data-theme="light"] .logo-text { color: #0f172a; }
+
+/* Main Content Area */
+.main-content { flex-grow: 1; display: flex; flex-direction: column; min-width: 0; }
+
+header { 
+    height: 70px; background: var(--card-bg); display: flex; align-items: center; 
+    padding: 0 32px; border-bottom: 1px solid var(--border-color); gap: 20px;
+}
+.header-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.header-left { display: flex; gap: 20px; align-items: center; z-index: 1;}
+.header-right { margin-left: auto; display: flex; align-items: center; gap: 20px; }
+.header-btn { background: none; border: none; color: var(--text-main); font-size: 1.4rem; cursor: pointer; }
+
+/* Analytics & Rescue Grid Layouts */
+.analytics-grid, .rescue-grid-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 24px;
+    align-items: start;
+    padding-bottom: 40px;
+}
+
+.main-display-area {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.charts-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.glass-card canvas {
+    max-height: 250px !important; 
+    width: 100% !important;
+}
+
+.side-panel .glass-card {
+    min-height: auto;          /* Removes the forced 350px height */
+    justify-content: flex-start; /* Groups items at the top */
+    gap: 8px;                  /* Adds a small gap between title and list */
+}
+
+
+
+/* Ensure the card itself doesn't stretch weirdly */
+.glass-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 350px;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+/* Component Styling: Glass Cards */
+.glass-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.glass-card h3 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+}
+
+/* Custom Styled Selects */
+.custom-select {
+    background: var(--primary-bg);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    padding: 10px 16px;
+    border-radius: 8px;
+    outline: none;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    min-width: 150px;
+}
+.custom-select:hover { border-color: var(--accent-blue); }
+
+#deptHotspots {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+/* Department Progress Bars (Hotspots) */
+.dept-stat-row { margin-bottom: 16px; }
+.dept-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+.progress-bar-bg {
+    height: 8px;
+    /* Use a solid, subtle color that works in dark mode */
+    background: #334155; 
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.progress-bar-fill { 
+    height: 100%; 
+    /* Default color if none is provided via JS */
+    background-color: var(--safe-green); 
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+}
+
+[data-theme="light"] .progress-bar-bg {
+    background: #e2e8f0; /* Light gray for light mode visibility */
+}
+/* Rescue Page Specifics */
+.rescue-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.rescue-card-v2 {
+    background: var(--primary-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    transition: all 0.2s;
+}
+.rescue-card-v2:hover { transform: translateY(-5px); border-color: var(--accent-blue); }
+
+.rescue-avatar {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    border: 3px solid var(--accent-blue);
+    margin-bottom: 12px;
+    object-fit: cover;
+}
+
+.rescue-body h4 { font-size: 1.1rem; color: white; margin-bottom: 4px; }
+.rescue-body span { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
+
+.rescue-footer {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color);
+}
+
+.rescue-action-btn {
+    background: rgba(255,255,255,0.05);
+    border: none;
+    color: var(--text-main);
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: background 0.2s;
+}
+.rescue-action-btn:hover { background: var(--accent-blue); color: white; }
+
+.rescue-badge {
+    background: var(--accent-blue);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+/* Personnel Grid (index.html) */
+.content-body { padding: 32px; flex-grow: 1; }
+.personnel-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.dept-container { 
+    border: 1px solid var(--border-color); 
+    border-radius: 16px; 
+    padding: 24px; 
+    /* Gradient gives it a subtle metallic/glass feel */
+    background: linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+    /* Subtle inner shadow for depth */
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+    transition: border-color 0.3s ease;
+}
+.dept-label { font-size: 0.95rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 20px; letter-spacing: 1.5px; }
+
+.person-card {
+    background: #0f172a; padding: 24px; border-radius: 14px; 
+    border: 1px solid var(--border-color); margin-bottom: 16px; cursor: pointer;
+}
+
+/* Emergency State Colors */
+.emergency-active .person-card.not-safe { border-left: 5px solid var(--emergency-red); }
+.emergency-active .person-card.safe { border-left: 5px solid var(--safe-green); }
+.status-pill { 
+    display: none; width: 100%; margin-top: 12px; padding: 10px; border-radius: 6px; 
+    font-weight: 800; font-size: 0.75rem; border: none; cursor: pointer; 
+}
+.emergency-active .status-pill { display: block; }
+
+/* Panic Button */
+.panic-btn { 
+    padding: 10px 24px; border: none; border-radius: 6px; color: white; 
+    font-weight: 800; cursor: pointer; background: var(--emergency-red);
+    text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+/* Modal Styling */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 1000; }
+.modal-content { background: var(--card-bg); padding: 40px; border-radius: 20px; width: 380px; text-align: center; border: 1px solid var(--border-color); }
+
+/* Theme Overrides for Charts in Light Mode */
+[data-theme="light"] .glass-card, [data-theme="light"] .person-card {
+    background: #fafafa;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+}
+[data-theme="light"] .dept-container { background: #ffffff;
+    border: 1px solid #e2e8f0; 
+    border-radius: 16px; 
+    padding: 24px; 
+    /* Layered shadows for a "premium" feel */
+    box-shadow: 
+        0 1px 3px rgba(0,0,0,0.02),
+        0 20px 25px -5px rgba(0,0,0,0.03);}
+[data-theme="light"] .rescue-card-v2 { background: #f8fafc; border-color: #e2e8f0; }
+[data-theme="light"] .custom-select { background: #ffffff; border-color: #e2e8f0; }
+[data-theme="light"] .rescue-body h4 { color: #1e293b; }
+[data-theme="light"] .nav-item:hover {
+    background: #f1f5f9;
+}
+
+[data-theme="light"] .nav-item.active {
+    background: var(--accent-blue);
+    color: white;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+}
