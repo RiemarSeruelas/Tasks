@@ -1,9 +1,13 @@
-import AppShell from "../components/AppShell";
+import { useMemo } from "react";
+import AppShell from "../components/Appshell";
 import { useDashboardStore } from "../store/useDashboardStore";
 
 export default function RescuePage() {
-  const rescueTeam = useDashboardStore((s) =>
-    s.personnel.filter((p) => p.isRescue)
+  const personnel = useDashboardStore((s) => s.personnel);
+
+  const rescueTeam = useMemo(
+    () => personnel.filter((p) => p.isRescue),
+    [personnel]
   );
 
   return (
@@ -28,7 +32,11 @@ export default function RescuePage() {
         <div className="rescue-grid">
           {rescueTeam.map((person) => (
             <div className="rescue-card" key={person.id}>
-              <img src={person.img} alt={person.name} className="rescue-avatar" />
+              <img
+                src={person.img}
+                alt={person.name}
+                className="rescue-avatar"
+              />
               <div className="rescue-name">{person.name}</div>
               <div className="rescue-role">{person.role}</div>
               <div className="rescue-contact">{person.phone}</div>
@@ -52,6 +60,10 @@ export default function RescuePage() {
           <div className="metric-card">
             <div className="metric-label">Evac Support</div>
             <div className="metric-value safe-text">Ready</div>
+          </div>
+          <div className="metric-card">
+            <div className="metric-label">Communication</div>
+            <div className="metric-value safe-text">Online</div>
           </div>
         </div>
       </aside>

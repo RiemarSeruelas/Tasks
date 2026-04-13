@@ -11,11 +11,20 @@ export const useDashboardStore = create(
       emergencyStartTime: null,
       selectedDepartment: "ALL",
       searchTerm: "",
+      selectedAnalyticsEventId: "LIVE",
+      theme: "light",
       personnel: initialPersonnel,
       history: [],
 
       setDepartmentFilter: (dept) => set({ selectedDepartment: dept }),
       setSearchTerm: (value) => set({ searchTerm: value }),
+      setSelectedAnalyticsEventId: (eventId) =>
+        set({ selectedAnalyticsEventId: eventId }),
+
+      toggleTheme: () =>
+        set((state) => ({
+          theme: state.theme === "dark" ? "light" : "dark",
+        })),
 
       toggleEmergency: () => {
         const { emergencyActive, emergencyStartTime, personnel, history } = get();
@@ -88,6 +97,8 @@ export const useDashboardStore = create(
           emergencyStartTime: null,
           selectedDepartment: "ALL",
           searchTerm: "",
+          selectedAnalyticsEventId: "LIVE",
+          theme: "light",
           personnel: initialPersonnel,
           history: [],
         }),

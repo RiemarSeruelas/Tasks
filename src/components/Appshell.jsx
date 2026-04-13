@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import { useDashboardStore } from "../store/useDashboardStore";
 
 export default function AppShell({
   title,
@@ -8,6 +9,8 @@ export default function AppShell({
   children,
 }) {
   const location = useLocation();
+  const theme = useDashboardStore((s) => s.theme);
+  const toggleTheme = useDashboardStore((s) => s.toggleTheme);
 
   const navItems = [
     { label: "Personnel", path: "/" },
@@ -18,7 +21,7 @@ export default function AppShell({
   ];
 
   return (
-    <div className="app-shell">
+    <div className="app-shell" data-theme={theme}>
       <header className="topbar">
         <div className="topbar-left">
           <div className="brand-card">
@@ -44,6 +47,11 @@ export default function AppShell({
 
         <div className="topbar-right">
           {actionSlot}
+
+          <button className="top-nav-btn" onClick={toggleTheme}>
+            {theme === "dark" ? "☀ Light" : "🌙 Dark"}
+          </button>
+
           <div className="admin-chip">Admin</div>
         </div>
       </header>

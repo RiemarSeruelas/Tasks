@@ -1,38 +1,107 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import AppShell from "../components/Appshell";
 import { useDashboardStore } from "../store/useDashboardStore";
 
+function useAnimatedNumber(target, duration = 500) {
+  const [value, setValue] = useState(target);
+
+  useEffect(() => {
+    let frameId;
+    const startValue = value;
+    const startTime = performance.now();
+
+    function animate(now) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const nextValue = startValue + (target - startValue) * eased;
+
+      setValue(nextValue);
+
+      if (progress < 1) {
+        frameId = requestAnimationFrame(animate);
+      }
+    }
+
+    frameId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(frameId);
+  }, [target]);
+
+  return value;
+}
+
 export default function AnalyticsPage() {
   const personnel = useDashboardStore((s) => s.personnel);
+  const history = useDashboardStore((s) => s.history);
+  const selectedAnalyticsEventId = useDashboardStore(
+    (s) => s.selectedAnalyticsEventId
+  );
+  const setSelectedAnalyticsEventId = useDashboardStore(
+    (s) => s.setSelectedAnalyticsEventId
+  );
 
-  const civilians = useMemo(
+  const civiliansLive = useMemo(
     () => personnel.filter((p) => !p.isRescue),
     [personnel]
   );
 
-  const safeCount = civilians.filter((p) => p.status === "SAFE").length;
-  const notSafeCount = civilians.length - safeCount;
-  const safePercent = civilians.length
-    ? Math.round((safeCount / civilians.length) * 100)
+  const selectedEvent = useMemo(() => {
+    if (selectedAnalyticsEventId === "LIVE") return null;
+    return history.find((h) => h.id === selectedAnalyticsEventId) || null;
+  }, [history, selectedAnalyticsEventId]);
+
+  const analyticsPeople = useMemo(() => {
+    if (!selectedEvent) {
+      return civiliansLive.map((p) => ({
+        id: p.id,
+        name: p.name,
+        dept: p.dept,
+        role: p.role,
+        status: p.status,
+      }));
+    }
+    return selectedEvent.personnelSnapshot || [];
+  }, [civiliansLive, selectedEvent]);
+
+  const safeCount = analyticsPeople.filter((p) => p.status === "SAFE").length;
+  const notSafeCount = analyticsPeople.length - safeCount;
+
+  const safePercent = analyticsPeople.length
+    ? Math.round((safeCount / analyticsPeople.length) * 100)
     : 0;
 
   const deptStats = useMemo(() => {
-    const grouped = [...new Set(civilians.map((p) => p.dept))];
+    const grouped = [...new Set(analyticsPeople.map((p) => p.dept))];
     return grouped.map((dept) => {
-      const people = civilians.filter((p) => p.dept === dept);
+      const people = analyticsPeople.filter((p) => p.dept === dept);
       const safe = people.filter((p) => p.status === "SAFE").length;
       const total = people.length;
       const percent = total ? Math.round((safe / total) * 100) : 0;
       return { dept, safe, total, percent };
     });
-  }, [civilians]);
+  }, [analyticsPeople]);
+
+  const selectedLabel = selectedEvent
+    ? `${selectedEvent.timestamp} (${selectedEvent.duration})`
+    : "LIVE CURRENT STATE";
+
+  const animatedSafeCount = useAnimatedNumber(safeCount, 500);
+  const animatedNotSafeCount = useAnimatedNumber(notSafeCount, 500);
+  const animatedSafePercent = useAnimatedNumber(safePercent, 600);
+
+  const donutSize = 150;
+  const strokeWidth = 18;
+  const radius = (donutSize - strokeWidth) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const dashOffset =
+    circumference - (animatedSafePercent / 100) * circumference;
 
   return (
     <AppShell
       title="Analytics Overview"
       subtitle="Emergency readiness, personnel safety distribution, and department hotspots"
       summaryStats={[
-        { value: civilians.length, label: "TRACKED" },
+        { value: analyticsPeople.length, label: "TRACKED" },
         { value: safeCount, label: "SAFE", variant: "green" },
         { value: notSafeCount, label: "NOT SAFE", variant: "red" },
         { value: `${safePercent}%`, label: "READINESS", variant: "amber" },
@@ -40,14 +109,26 @@ export default function AnalyticsPage() {
     >
       <aside className="panel left-panel">
         <div className="panel-section">
-          <div className="panel-title">Live Summary</div>
+          <div className="panel-title">Analytics Source</div>
+
+          <label className="field-label">Pick Event</label>
+          <select
+            className="styled-input"
+            value={selectedAnalyticsEventId}
+            onChange={(e) => setSelectedAnalyticsEventId(e.target.value)}
+          >
+            <option value="LIVE">LIVE CURRENT STATE</option>
+            {history.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.timestamp}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="mini-info-card">
-          <div className="mini-info-title">Summary</div>
-          <div className="mini-info-text">
-            This page now reads live data from the shared dashboard store.
-          </div>
+          <div className="mini-info-title">Selected Dataset</div>
+          <div className="mini-info-text">{selectedLabel}</div>
         </div>
       </aside>
 
@@ -60,26 +141,38 @@ export default function AnalyticsPage() {
                 <div className="bar-label">Safe</div>
                 <div className="bar-track">
                   <div
-                    className="bar-fill safe-bar"
+                    className="bar-fill safe-bar animated-bar"
                     style={{
-                      width: `${civilians.length ? (safeCount / civilians.length) * 100 : 0}%`,
+                      width: `${
+                        analyticsPeople.length
+                          ? (animatedSafeCount / analyticsPeople.length) * 100
+                          : 0
+                      }%`,
                     }}
                   />
                 </div>
-                <div className="bar-value">{safeCount}</div>
+                <div className="bar-value">
+                  {Math.round(animatedSafeCount)}
+                </div>
               </div>
 
               <div className="bar-wrap">
                 <div className="bar-label">Not Safe</div>
                 <div className="bar-track">
                   <div
-                    className="bar-fill unsafe-bar"
+                    className="bar-fill unsafe-bar animated-bar"
                     style={{
-                      width: `${civilians.length ? (notSafeCount / civilians.length) * 100 : 0}%`,
+                      width: `${
+                        analyticsPeople.length
+                          ? (animatedNotSafeCount / analyticsPeople.length) * 100
+                          : 0
+                      }%`,
                     }}
                   />
                 </div>
-                <div className="bar-value">{notSafeCount}</div>
+                <div className="bar-value">
+                  {Math.round(animatedNotSafeCount)}
+                </div>
               </div>
             </div>
           </div>
@@ -87,14 +180,36 @@ export default function AnalyticsPage() {
           <div className="chart-card">
             <h3>Safety Distribution (%)</h3>
             <div className="donut-card">
-              <div
-                className="fake-donut"
-                style={{
-                  background: `conic-gradient(#16b364 0 ${safePercent}%, #ef4444 ${safePercent}% 100%)`,
-                }}
-              >
-                <div className="fake-donut-inner">{safePercent}%</div>
-              </div>
+              <div className="svg-donut-wrap">
+  <svg
+    width={donutSize}
+    height={donutSize}
+    viewBox={`0 0 ${donutSize} ${donutSize}`}
+    className="svg-donut"
+  >
+    <circle
+      className="svg-donut-unsafe"
+      cx={donutSize / 2}
+      cy={donutSize / 2}
+      r={radius}
+      strokeWidth={strokeWidth}
+      fill="none"
+    />
+    <circle
+      className="svg-donut-progress"
+      cx={donutSize / 2}
+      cy={donutSize / 2}
+      r={radius}
+      strokeWidth={strokeWidth}
+      fill="none"
+      strokeDasharray={circumference}
+      strokeDashoffset={dashOffset}
+    />
+  </svg>
+  <div className="svg-donut-center">
+    {Math.round(animatedSafePercent)}%
+  </div>
+</div>
               <div className="donut-legend">
                 <div>
                   <span className="legend-dot safe" /> Safe
@@ -120,7 +235,7 @@ export default function AnalyticsPage() {
               </div>
               <div className="hotspot-track">
                 <div
-                  className={`hotspot-fill ${
+                  className={`hotspot-fill animated-bar ${
                     item.percent === 100
                       ? "good"
                       : item.percent >= 50
@@ -132,6 +247,14 @@ export default function AnalyticsPage() {
               </div>
             </div>
           ))}
+
+          {deptStats.length === 0 && (
+            <div className="mini-info-card">
+              <div className="mini-info-text">
+                No analytics data available yet.
+              </div>
+            </div>
+          )}
         </div>
       </aside>
     </AppShell>
