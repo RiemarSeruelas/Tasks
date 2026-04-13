@@ -266,3 +266,79 @@ function loadLogs() {
             </div>`).join('') || '<p style="padding:20px;">No records.</p>';
     }
 }
+
+async function exportReport(index) {
+    const history = JSON.parse(localStorage.getItem('emergencyHistory') || '[]');
+    const event = history[index];
+    if (!event) return;
+
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Emergency Report');
+
+    // 1. Header: "EMERGENCY" (Big Red Banner)
+    worksheet.mergeCells('A1:D1');
+    const mainHeader = worksheet.getCell('A1');
+    mainHeader.value = 'EMERGENCY';
+    mainHeader.font = { name: 'Arial Black', size: 16, color: { argb: 'FFFFFFFF' } };
+    mainHeader.alignment = { vertical: 'middle', horizontal: 'center' };
+    mainHeader.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFEF4444' } };
+
+    // 2. Sub-header: Timestamp
+    worksheet.mergeCells('A2:D2');
+    const subHeader = worksheet.getCell('A2');
+    subHeader.value = `Event Log: ${event.timestamp}`;
+    subHeader.font = { italic: true, size: 11 };
+    subHeader.alignment = { horizontal: 'center' };
+
+    worksheet.addRow([]); // Spacer
+
+    // 3. Define Table Columns
+    const tableHeader = worksheet.addRow(['ID', 'Name', 'Department', 'Status']);
+    tableHeader.font = { bold: true };
+    
+    worksheet.getColumn(1).width = 10; 
+    worksheet.getColumn(2).width = 25; 
+    worksheet.getColumn(3).width = 20; 
+    worksheet.getColumn(4).width = 15;
+
+    // 4. Filter and Add Data
+    // We filter out any personnel whose department is "EMERGENCY"
+    const civilianData = event.safetyData.filter(p => p.dept.toUpperCase() !== "EMERGENCY");
+
+    civilianData.forEach((person) => {
+        const originalPerson = personnel.find(p => p.name === person.name);
+        const personID = originalPerson ? originalPerson.id : 'N/A';
+
+        const row = worksheet.addRow([
+            personID,
+            person.name,
+            person.dept,
+            person.status
+        ]);
+
+        const statusCell = row.getCell(4);
+        statusCell.alignment = { horizontal: 'center' };
+
+        // Apply "Tile" styling (Solid background colors)
+        if (person.status === 'SAFE') {
+            statusCell.fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: { argb: 'FF10B981' } // Green
+            };
+            statusCell.font = { color: { argb: 'FFFFFFFF' }, bold: true };
+        } else {
+            statusCell.fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: { argb: 'FFEF4444' } // Red
+            };
+            statusCell.font = { color: { argb: 'FFFFFFFF' }, bold: true };
+        }
+    });
+
+    // Generate and Trigger Download
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    saveAs(blob, `Emergency_Report_${event.timestamp.split(',')[0].replace(/\//g, '-')}.xlsx`);
+}

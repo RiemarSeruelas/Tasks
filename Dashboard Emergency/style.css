@@ -14,14 +14,21 @@
 
 /* Light Mode Specific Overrides */
 [data-theme="light"] {
-    --primary-bg: #f1f5f9;    /* Slightly deeper cool gray */
-    --card-bg: #ffffff;       /* Pure white cards */
-    --sidebar-bg: #ffffff;
-    --text-main: #0f172a;     /* Darker navy for better readability */
-    --text-muted: #64748b;
-    --border-color: #cbd5e1;  /* Darker borders for definition */
+    /* Backgrounds: Using soft, cool grays instead of pure white */
+    --primary-bg: #f8fafc;    /* Very light "Ghost White" for the main page */
+    --card-bg: #ffffff;       /* Pure white only for cards to make them "pop" */
+    --sidebar-bg: #f1f5f9;    /* Slightly darker gray for the sidebar to create depth */
+    
+    /* Text: Softening the black to a deep Charcoal */
+    --text-main: #334155;     /* Dark Slate - much easier on the eyes than pure black */
+    --text-muted: #64748b;    /* Cool gray for secondary text */
+    
+    /* Borders: Softening the lines */
+    --border-color: #e2e8f0;  /* Subtle lines that define sections without being "loud" */
+    
+    /* Optional: Soften the accent blue for light mode */
+    --accent-blue: #3b82f6; 
 }
-
 /* Global Styles */
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
 body { background-color: var(--primary-bg); display: flex; color: var(--text-main); min-height: 100vh; overflow-x: hidden; }
@@ -305,4 +312,67 @@ header {
     background: var(--accent-blue);
     color: white;
     box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+}
+
+/* --- LOGIN PAGE STYLES --- */
+.login-screen {
+    background: var(--primary-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+.login-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    padding: 48px;
+    border-radius: 24px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.login-card input {
+    width: 100%;
+    padding: 14px 18px;
+    margin: 10px 0;
+    background: var(--primary-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    color: var(--text-main);
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.login-card input:focus {
+    border-color: var(--accent-blue);
+}
+
+.login-card button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 24px;
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.login-card button:hover {
+    background: #1d4ed8; /* Slightly darker blue */
+    transform: translateY(-2px);
+}
+
+.login-card button:active {
+    transform: translateY(0);
 }
