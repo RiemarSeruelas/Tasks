@@ -198,43 +198,47 @@ export default function HistoryPage() {
         <div className="table-card">
           <div className="table-title">Incident History</div>
 
-          <div className="history-table">
-            <div className="history-row history-head">
-              <div>Timestamp</div>
-              <div>Duration</div>
-              <div>Safe</div>
-              <div>Not Safe</div>
-              <div>Export</div>
+            <div className="history-table history-table-single">
+              {history.length > 0 ? (
+                history.map((item) => (
+                  <div
+                    className="history-row history-row-clickable history-card"
+                    key={item.id}
+                    onClick={() => downloadIncidentExcel(item)}
+                    title="Click to download Excel report"
+                  >
+                    <div className="history-card-group">
+                      <div className="history-card-label">Timestamp</div>
+                      <div className="history-card-value">{item.timestamp}</div>
+                    </div>
+                    <div className="history-card-group">
+                      <div className="history-card-label">Duration</div>
+                      <div className="history-card-value">{item.duration}</div>
+                    </div>
+                    <div className="history-card-group">
+                      <div className="history-card-label">Safe</div>
+                      <div className="history-card-value">{item.safe}</div>
+                    </div>
+                    <div className="history-card-group">
+                      <div className="history-card-label">Not Safe</div>
+                      <div className="history-card-value">{item.notSafe}</div>
+                    </div>
+                    <div className="history-card-export">
+                      <span className="status-chip done">Excel</span>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="metric-card">
+                  <div className="metric-label">No incidents yet</div>
+                  <div className="metric-value">
+                    Trigger and end an emergency first
+                  </div>
+                </div>
+              )}
             </div>
-
-            {history.map((item) => (
-              <div
-                className="history-row history-row-clickable"
-                key={item.id}
-                onClick={() => downloadIncidentExcel(item)}
-                title="Click to download Excel report"
-              >
-                <div>{item.timestamp}</div>
-                <div>{item.duration}</div>
-                <div>{item.safe}</div>
-                <div>{item.notSafe}</div>
-                <div>
-                  <span className="status-chip done">Excel</span>
-                </div>
-              </div>
-            ))}
-
-            {history.length === 0 && (
-              <div className="metric-card">
-                <div className="metric-label">No incidents yet</div>
-                <div className="metric-value">
-                  Trigger and end an emergency first
-                </div>
-              </div>
-            )}
           </div>
-        </div>
-      </section>
+        </section>
 
       <aside className="panel right-panel">
         <div className="panel-title">Latest Snapshot</div>

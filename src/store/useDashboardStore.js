@@ -91,6 +91,34 @@ export const useDashboardStore = create(
         });
       },
 
+      addRescuePersonnel: (personData) => {
+        const { personnel } = get();
+        const newPerson = {
+          id: `p${Date.now()}`,
+          ...personData,
+          isRescue: true,
+          status: "READY",
+          img: personData.img || `https://i.pravatar.cc/150?u=${personData.name}`,
+        };
+        set({ personnel: [...personnel, newPerson] });
+      },
+
+      removeRescuePersonnel: (personId) => {
+        const { personnel } = get();
+        set({
+          personnel: personnel.filter((p) => p.id !== personId),
+        });
+      },
+
+      updateRescuePersonnel: (personId, personData) => {
+        const { personnel } = get();
+        set({
+          personnel: personnel.map((p) =>
+            p.id === personId ? { ...p, ...personData } : p
+          ),
+        });
+      },
+
       resetDashboard: () =>
         set({
           emergencyActive: false,

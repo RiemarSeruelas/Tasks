@@ -1,6 +1,21 @@
+import { useState } from "react";
 import AppShell from "../components/Appshell";
 
 export default function MapPage() {
+  const [mapImage, setMapImage] = useState(null);
+  const [mapName, setMapName] = useState("");
+
+  const handleMapUpload = (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (loadEvent) => {
+      setMapImage(loadEvent.target.result);
+      setMapName(file.name);
+    };
+    reader.readAsDataURL(file);
+  };
   return (
     <AppShell
       title="Evacuation Map"
@@ -32,13 +47,37 @@ export default function MapPage() {
 
       <section className="panel center-panel">
         <div className="map-card">
-          <div className="map-placeholder">
-            <div>
-              <div className="map-title">Facility Evacuation Layout</div>
-              <div className="map-subtext">
-                Replace this placeholder with your plant floor plan image or SVG.
+          <div className={`map-placeholder ${mapImage ? "has-image" : ""}`}>
+            {mapImage ? (
+              <img
+                className="map-image-preview"
+                src={mapImage}
+                alt="Uploaded facility map"
+              />
+            ) : (
+              <div>
+                <div className="map-title">Facility Evacuation Layout</div>
+                <div className="map-subtext">
+                  Upload your plant floor plan image here.
+                </div>
               </div>
-            </div>
+            )}
+          </div>
+
+          <div className="map-upload-panel">
+            <label className="field-label" htmlFor="map-image-upload">
+              Upload Map Image
+            </label>
+            <input
+              id="map-image-upload"
+              type="file"
+              accept="image/*"
+              className="styled-input"
+              onChange={handleMapUpload}
+            />
+            {mapName && (
+              <div className="mini-info-text">Showing: {mapName}</div>
+            )}
           </div>
         </div>
       </section>

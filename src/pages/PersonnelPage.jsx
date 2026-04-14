@@ -93,16 +93,12 @@ export default function PersonnelPage() {
           <div className="table-title">Personnel Status</div>
 
           <div className="history-table">
-            <div className="history-row history-head">
-              <div>Name</div>
-              <div>Department</div>
-              <div>Role</div>
-              <div>Status</div>
-              <div>Action</div>
-            </div>
-
             {filtered.map((person) => (
-              <div className="history-row" key={person.id}>
+              <div 
+                className="history-row" 
+                key={person.id}
+                onClick={() => togglePersonStatus(person.id)}
+              >
                 <div>{person.name}</div>
                 <div>{person.dept}</div>
                 <div>{person.role}</div>
@@ -122,15 +118,6 @@ export default function PersonnelPage() {
                   >
                     {person.status === "SAFE" ? "SAFE" : "NOT SAFE"}
                   </span>
-                </div>
-                <div>
-                  <button
-                    className="primary-action-btn"
-                    style={{ marginTop: 0, height: 36 }}
-                    onClick={() => togglePersonStatus(person.id)}
-                  >
-                    Toggle
-                  </button>
                 </div>
               </div>
             ))}
